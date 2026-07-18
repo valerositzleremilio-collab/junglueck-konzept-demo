@@ -169,12 +169,27 @@
     window.JUNGLUECK_REVEAL = function registerReveals() { scanImmediate(); };
     scanImmediate();
     window.addEventListener("load", scanImmediate);
+
+    // Scroll-Fallback (unabhängig von IO): robust auch in gedrosselten/Hintergrund-
+    // Tabs, in denen IntersectionObserver-Callbacks unzuverlässig feuern.
+    let scanQueued = false;
+    function queueScan() {
+      if (scanQueued) return;
+      scanQueued = true;
+      requestAnimationFrame(() => { scanQueued = false; scanImmediate(); });
+      setTimeout(() => { scanQueued = false; scanImmediate(); }, 120); // rAF-loser Fallback
+    }
+    window.addEventListener("scroll", queueScan, { passive: true });
+    window.addEventListener("resize", queueScan, { passive: true });
   }
 
   /* --------------------------------------------------- SEKTIONS-MODULE HOOK */
   // Aufgabe 2/3 registrieren hier ihre Renderer. Bootstrap ruft sie geordnet auf.
   window.JUNGLUECK_MODULES = window.JUNGLUECK_MODULES || [];
+  let modulesRan = false;
   function runModules() {
+    if (modulesRan) return; // idempotent: nur einmal, nach allen sync-Scripts
+    modulesRan = true;
     (window.JUNGLUECK_MODULES || []).forEach((mod) => {
       try { typeof mod === "function" && mod({ State, PRODUKTE, KATEGORIEN, HAUTTYPEN, $, $$, euro, toast, prefersReduced }); }
       catch (err) { console.error("[Modul-Fehler]", err); }
@@ -188,8 +203,14 @@
   shopLink && shopLink.addEventListener("click", (e) => e.preventDefault());
 
   /* --------------------------------------------------------------- INIT */
-  document.addEventListener("DOMContentLoaded", runModules);
-  if (document.readyState !== "loading") runModules();
+  // Alle Sektions-Scripts liegen synchron am Body-Ende → DOMContentLoaded feuert
+  // erst NACH deren Registrierung. Fallback, falls DCL schon durch ist.
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", runModules);
+  } else {
+    // schon interaktiv/komplett: nächster Tick, damit spätere sync-Scripts pushen
+    setTimeout(runModules, 0);
+  }
 
   console.log("[JUNGLÜCK] Bootstrap bereit ·", PRODUKTE.length, "Produkte geladen.");
 })();

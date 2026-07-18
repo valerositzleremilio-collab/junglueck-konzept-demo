@@ -67,13 +67,128 @@
 
   <!-- ============================ MAIN ============================ -->
   <main id="main">
-    <!-- Sektionen 1–6 (Aufgabe 2) -->
-    <section class="section hero" id="hero" aria-label="Willkommen"><!-- A2 --></section>
-    <section class="section" id="versprechen" aria-label="Unser Versprechen"><!-- A2 --></section>
-    <section class="section section--tint" id="highlights" aria-label="Highlights"><!-- A2 --></section>
-    <section class="section" id="routine" aria-label="Routine-Finder"><!-- A2 --></section>
-    <section class="section section--tint" id="philosophie" aria-label="Philosophie"><!-- A2 --></section>
-    <section class="section" id="menschen" aria-label="Menschen"><!-- A2 --></section>
+    <!-- ============================ 1 · HERO ============================ -->
+    <section class="section hero" id="hero" aria-label="Willkommen">
+      <div class="wrap hero__grid">
+        <div class="hero__copy">
+          <p class="eyebrow" data-reveal>Naturkosmetik · Konzept-Redesign</p>
+          <h1 class="hero__title" data-reveal>
+            Pflege, die
+            <span class="sig">
+              <span class="em">ehrlich</span>
+              <svg class="sig__stroke" viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M4 13 C 45 4, 90 4, 130 10 S 185 15, 196 7"/></svg>
+            </span>
+            ist.
+          </h1>
+          <p class="hero__sub lead" data-reveal>Ein Wirkstoff pro Produkt. Klar erklärt, ohne Versprechen, das wir nicht halten können.</p>
+          <div class="hero__cta" data-reveal>
+            <button class="btn btn--primary" data-open-shop>Produkte entdecken</button>
+            <a class="btn btn--ghost" href="#routine">Routine finden</a>
+          </div>
+        </div>
+
+        <div class="hero__visual" data-reveal aria-hidden="true">
+          <!-- TODO(Foto): editorial Produkt-Stillleben 1200x1500 ersetzt diese CSS-Komposition -->
+          <div class="hero-still">
+            <div class="hero-still__leaf hero-still__leaf--a"></div>
+            <div class="hero-still__leaf hero-still__leaf--b"></div>
+            <div class="hero-still__flacon">
+              <span class="hero-still__cap"></span>
+              <span class="hero-still__label">
+                <b>Hyaluron</b>
+                <i>Serum</i>
+              </span>
+            </div>
+            <div class="hero-still__chip">1 Wirkstoff</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= 2 · VERSPRECHEN ======================= -->
+    <section class="section" id="versprechen" aria-label="Unser Versprechen">
+      <div class="wrap versprechen">
+        <h2 class="versprechen__head" data-reveal>Vier Dinge, auf die du dich verlassen kannst.</h2>
+        <ul class="versprechen__list">
+          <li class="vline" data-reveal><span class="vline__text">Ein Wirkstoff. Nicht zwölf.</span><span class="vline__note">Was drin ist, steht drauf.</span></li>
+          <li class="vline" data-reveal><span class="vline__text">Recyceltes Braunglas, immer wieder.</span><span class="vline__note">Zurückgeben, neu befüllen.</span></li>
+          <li class="vline" data-reveal><span class="vline__text">Vegan und ohne Mikroplastik.</span><span class="vline__note">Ohne Ausnahme, ohne Sternchen.</span></li>
+          <li class="vline" data-reveal><span class="vline__text">Preise, die ehrlich bleiben.</span><span class="vline__note">Kein Aufschlag für den Namen.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ======================= 3 · HIGHLIGHTS ======================= -->
+    <section class="section section--tint" id="highlights" aria-label="Highlights">
+      <div class="wrap highlights__head">
+        <div>
+          <h2 data-reveal>Die Lieblinge.</h2>
+          <p class="muted" data-reveal>Womit die meisten anfangen.</p>
+        </div>
+        <div class="highlights__nav" data-reveal>
+          <button class="icon-btn carousel-prev" aria-label="Zurück" data-car="highlights-track">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+          </button>
+          <button class="icon-btn carousel-next" aria-label="Weiter" data-car="highlights-track">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="carousel" id="highlights-track" role="list" aria-label="Highlight-Produkte" data-mount="highlights">
+        <noscript><p class="wrap muted">Für die interaktive Produktansicht bitte JavaScript aktivieren. Alle Produkte findest du außerdem im Shop.</p></noscript>
+      </div>
+    </section>
+
+    <!-- ======================= 4 · ROUTINE-FINDER ======================= -->
+    <section class="section" id="routine" aria-label="Routine-Finder">
+      <div class="wrap routine">
+        <div class="routine__intro" data-reveal>
+          <p class="eyebrow">Routine-Finder</p>
+          <h2>Was braucht deine Haut gerade?</h2>
+          <p class="muted">Drei Fragen, eine ehrliche Empfehlung. Kein Konto, keine Mail.</p>
+        </div>
+        <div class="routine__card" id="quiz" data-reveal data-mount="quiz">
+          <noscript><p class="muted">Der Routine-Finder braucht JavaScript. Stöbere sonst gern direkt im Shop.</p></noscript>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= 5 · PHILOSOPHIE ======================= -->
+    <section class="section section--tint" id="philosophie" aria-label="Philosophie">
+      <div class="wrap philo">
+        <div class="philo__visual" data-reveal aria-hidden="true">
+          <div class="philo__reveal">
+            <div class="philo__art">
+              <span class="philo__word">1</span>
+              <span class="philo__sub">Wirkstoff<br>pro Flasche</span>
+            </div>
+          </div>
+        </div>
+        <div class="philo__copy">
+          <h2 data-reveal>
+            Wir schreiben genau
+            <span class="sig">
+              <span class="em">einen</span>
+              <svg class="sig__stroke" viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M4 13 C 45 4, 90 4, 130 10 S 185 15, 196 7"/></svg>
+            </span>
+            Wirkstoff auf die Flasche.
+          </h2>
+          <p data-reveal>Weil du wissen sollst, was du dir ins Gesicht gibst. Keine Liste aus zwanzig Namen, die niemand liest. Ein Wirkstoff, eine Aufgabe, ehrlich benannt.</p>
+          <p data-reveal>Was drin ist, steht drauf. Was es kann, sagen wir dir ohne große Worte. Was es nicht kann, verschweigen wir nicht.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= 6 · MENSCHEN ======================= -->
+    <section class="section" id="menschen" aria-label="Menschen">
+      <div class="wrap menschen__head">
+        <h2 data-reveal>Menschen, keine Marke.</h2>
+        <p class="muted" data-reveal>Fahr mit der Maus über eine Person, dann erzählt sie kurz.</p>
+      </div>
+      <div class="menschen__strip" data-mount="menschen" role="list" aria-label="Team">
+        <noscript><p class="wrap muted">Die Menschen hinter dem Konzept: Lena Brandt (Gründerin), Mats Ohlsen (Labor), Feriha Aydın (Community), Jonas Krüger (Nachhaltigkeit), Pia Reinhardt (Service).</p></noscript>
+      </div>
+    </section>
 
     <!-- Sektionen 7–11 (Aufgabe 3) -->
     <section class="section section--tint" id="inhaltsstoffe" aria-label="Inhaltsstoffe"><!-- A3 --></section>
@@ -100,5 +215,6 @@
 
   <script src="data.js"></script>
   <script src="app.js"></script>
+  <script src="sections.js"></script>
 </body>
 </html>
