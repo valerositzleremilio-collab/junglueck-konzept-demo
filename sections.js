@@ -17,9 +17,14 @@
   };
 
   /* ---------- Platzhalter-Markup (kein Broken-Image) ---------- */
+  const CAT_SHADE = {
+    "Serum": 3, "Öl": 4, "Gel": 1, "Gesicht": 2, "Reinigung": 2, "Creme": 4,
+    "Maske": 5, "Lippen": 1, "Körper": 3, "Haar": 4, "Sonne": 1, "Set": 5,
+  };
   function placeholder(p) {
+    const shade = CAT_SHADE[p.kategorie] || 3;
     return (
-      '<div class="ph" role="img" aria-label="Produktbild ' + esc(p.name) + ' (Platzhalter)">' +
+      '<div class="ph" data-shade="' + shade + '" role="img" aria-label="Produktbild ' + esc(p.name) + ' (Platzhalter)">' +
         '<span class="ph__tag">' + esc(p.wirkstoff) + '</span>' +
         '<span class="ph__flacon"></span>' +
         '<span class="ph__name">' + esc(p.name) + '</span>' +
@@ -68,10 +73,21 @@
       State.addToCart(p.id, 1);
       ctx.toast(p.name + " ist im Korb.");
     });
-    // Schnellansicht (in A3 aktiviert; hier vorbereitet)
+    // Schnellansicht: klickbare Media + sichtbare Affordance (Auge)
     if (opts.quickview) {
-      el.querySelector(".product-card__media").addEventListener("click", () => opts.quickview(p));
-      el.querySelector(".product-card__media").style.cursor = "pointer";
+      const media = el.querySelector(".product-card__media");
+      const peek = document.createElement("span");
+      peek.className = "product-card__peek";
+      peek.setAttribute("aria-hidden", "true");
+      peek.innerHTML = ICON.eye + "<span>Schnellansicht</span>";
+      media.appendChild(peek);
+      media.style.cursor = "pointer";
+      media.setAttribute("role", "button");
+      media.setAttribute("tabindex", "0");
+      media.setAttribute("aria-label", "Schnellansicht " + p.name);
+      const open = () => opts.quickview(p);
+      media.addEventListener("click", open);
+      media.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } });
     }
     return el;
   }
@@ -412,7 +428,9 @@
     const fmt = (n) => Math.round(n).toLocaleString("de-DE");
 
     function run() {
+      // No-JS zeigt bereits die Zielzahl (im HTML). Animation setzt erst hier auf 0.
       if (ctx.prefersReduced) { numEl.textContent = fmt(target); return; }
+      numEl.textContent = "0";
       const dur = 1600, start = performance.now();
       const ease = (t) => 1 - Math.pow(1 - t, 3);
       function tick(now) {
@@ -488,10 +506,10 @@
     ];
     mount.innerHTML = FAQ.map((f, i) =>
       '<div class="faq__item">' +
-        '<button class="faq__q" aria-expanded="false" aria-controls="faq-a-' + i + '">' +
+        '<button class="faq__q" id="faq-q-' + i + '" aria-expanded="false" aria-controls="faq-a-' + i + '">' +
           '<span>' + esc(f.q) + '</span><span class="faq__icon" aria-hidden="true"></span>' +
         '</button>' +
-        '<div class="faq__a" id="faq-a-' + i + '"><div><p>' + esc(f.a) + '</p></div></div>' +
+        '<div class="faq__a" id="faq-a-' + i + '" role="region" aria-labelledby="faq-q-' + i + '"><div><p>' + esc(f.a) + '</p></div></div>' +
       '</div>').join("");
     mount.querySelectorAll(".faq__q").forEach((btn) => {
       btn.addEventListener("click", () => {
