@@ -1,0 +1,5 @@
+# Lokaler Dev-Server — nicht deployen (loest sonst Vercels Node-Server-Detektion aus)
+server.mjs
+# Projekt-Doku muss nicht oeffentlich ausgeliefert werden
+docs/
+.git
