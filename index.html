@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="de" class="no-js">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JUNGLÜCK — Naturkosmetik, ehrlich (Konzept)</title>
+  <meta name="description" content="Inoffizielles Konzept-Redesign der Naturkosmetik-Marke JUNGLÜCK. Ein Wirkstoff, ehrlich erklärt, in warmer Sprache. Portfolio-Konzept von Oddomode." />
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#FBFAF7" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23FBFAF7'/%3E%3Cpath d='M16 25c0-7 3-11 8-13-1 8-4 11-8 13Z' fill='%233E6B4E'/%3E%3Cpath d='M16 25c0-6-3-9-8-10 1 6 4 8 8 10Z' fill='%232C4E39'/%3E%3Cpath d='M16 26V15' stroke='%232C4E39' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Newsreader:ital,wght@1,400;1,500;1,600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+  <script>document.documentElement.classList.remove('no-js');</script>
+</head>
+<body>
+  <!-- Grain-Overlay (fixed, pointer-events none) -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- ============================ NAV ============================ -->
+  <header class="nav" id="nav" data-scrolled="false">
+    <div class="nav__inner">
+      <a href="#hero" class="nav__logo" aria-label="JUNGLÜCK Startseite">JUNG<span>LÜCK</span></a>
+
+      <nav class="nav__links" aria-label="Hauptnavigation">
+        <a href="#highlights">Produkte</a>
+        <a href="#routine">Routine</a>
+        <a href="#philosophie">Philosophie</a>
+        <a href="#nachhaltigkeit">Nachhaltigkeit</a>
+      </nav>
+
+      <div class="nav__actions">
+        <button class="icon-btn" id="open-shop" aria-label="Shop öffnen und suchen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        </button>
+        <button class="icon-btn" id="open-wishlist" aria-label="Wunschliste öffnen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.35-9.5-8.5C1 8.5 2.5 5 6 5c2 0 3.2 1.2 4 2.3C10.8 6.2 12 5 14 5c3.5 0 5 3.5 3.5 6.5C19 15.65 12 20 12 20Z"/></svg>
+          <span class="count-badge" id="wishlist-count" data-count="0" aria-live="polite" aria-label="Artikel auf Wunschliste">0</span>
+        </button>
+        <button class="icon-btn" id="open-cart" aria-label="Warenkorb öffnen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 11a2 2 0 0 1-2 1.8H9A2 2 0 0 1 7 19L6 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+          <span class="count-badge" id="cart-count" data-count="0" aria-live="polite" aria-label="Artikel im Warenkorb">0</span>
+        </button>
+        <button class="icon-btn nav__burger" id="open-menu" aria-label="Menü öffnen" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== MOBILES MENÜ ===================== -->
+  <div class="mobile-menu" id="mobile-menu" data-open="false" role="dialog" aria-modal="true" aria-label="Menü">
+    <button class="icon-btn mobile-menu__close" id="close-menu" aria-label="Menü schließen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <nav class="mobile-menu__list" aria-label="Mobile Navigation">
+      <a href="#highlights" data-menu-link>Produkte</a>
+      <a href="#routine" data-menu-link>Routine</a>
+      <a href="#philosophie" data-menu-link>Philosophie</a>
+      <a href="#nachhaltigkeit" data-menu-link>Nachhaltigkeit</a>
+      <a href="#" data-menu-link id="menu-shop-link">Shop</a>
+    </nav>
+  </div>
+
+  <!-- ============================ MAIN ============================ -->
+  <main id="main">
+    <!-- Sektionen 1–6 (Aufgabe 2) -->
+    <section class="section hero" id="hero" aria-label="Willkommen"><!-- A2 --></section>
+    <section class="section" id="versprechen" aria-label="Unser Versprechen"><!-- A2 --></section>
+    <section class="section section--tint" id="highlights" aria-label="Highlights"><!-- A2 --></section>
+    <section class="section" id="routine" aria-label="Routine-Finder"><!-- A2 --></section>
+    <section class="section section--tint" id="philosophie" aria-label="Philosophie"><!-- A2 --></section>
+    <section class="section" id="menschen" aria-label="Menschen"><!-- A2 --></section>
+
+    <!-- Sektionen 7–11 (Aufgabe 3) -->
+    <section class="section section--tint" id="inhaltsstoffe" aria-label="Inhaltsstoffe"><!-- A3 --></section>
+    <section class="section" id="nachhaltigkeit" aria-label="Nachhaltigkeit"><!-- A3 --></section>
+    <section class="section section--tint" id="stimmen" aria-label="Stimmen"><!-- A3 --></section>
+    <section class="section" id="faq" aria-label="Häufige Fragen"><!-- A3 --></section>
+    <section class="section section--deep" id="newsletter" aria-label="Newsletter"><!-- A3 --></section>
+  </main>
+
+  <!-- ============================ FOOTER ============================ -->
+  <footer class="footer" id="footer" aria-label="Fußzeile"><!-- A5: DSGVO-Links --></footer>
+
+  <!-- ===================== SHOP-OVERLAY (Aufgabe 3) ===================== -->
+  <div class="shop" id="shop" data-open="false" aria-hidden="true"><!-- A3 --></div>
+
+  <!-- ===================== WARENKORB-OVERLAY (Aufgabe 3) ===================== -->
+  <aside class="cart" id="cart" data-open="false" aria-hidden="true"><!-- A3 --></aside>
+
+  <!-- ===================== SCHNELLANSICHT-MODAL (Aufgabe 3) ===================== -->
+  <div class="quickview" id="quickview" data-open="false" aria-hidden="true"><!-- A3 --></div>
+
+  <!-- ===================== TOASTS ===================== -->
+  <div class="toast-wrap" id="toast-wrap" aria-live="polite"></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
