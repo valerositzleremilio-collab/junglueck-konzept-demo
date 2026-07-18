@@ -311,6 +311,236 @@
     });
   });
 
+  /* ---------- Helper: whenInView (IO + rect + scroll-Fallback) ---------- */
+  function whenInView(el, cb, threshold = 0.3) {
+    if (!el) return;
+    let done = false;
+    const fire = () => { if (done) return; done = true; cleanup(); cb(); };
+    const inZone = () => {
+      const r = el.getBoundingClientRect();
+      const vh = window.innerHeight || 800;
+      return r.top < vh * (1 - threshold * 0.4) && r.bottom > vh * 0.1;
+    };
+    let io;
+    function cleanup() {
+      if (io) io.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    }
+    function onScroll() { if (inZone()) fire(); }
+    if (inZone()) { fire(); return; }
+    if ("IntersectionObserver" in window) {
+      io = new IntersectionObserver((ents) => { ents.forEach((e) => { if (e.isIntersecting) fire(); }); }, { threshold });
+      io.observe(el);
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+  }
+  window.JUNGLUECK_INVIEW = whenInView;
+
+  /* ======================================================= MODUL: INHALTSSTOFFE */
+  window.JUNGLUECK_MODULES.push(function ingredientsModule(ctx) {
+    const { PRODUKTE, $ } = ctx;
+    const list = $('[data-mount="ingr-list"]');
+    const detail = $('[data-mount="ingr-detail"]');
+    if (!list || !detail) return;
+
+    // Wirkstoffe (neutral beschrieben, keine Heilversprechen)
+    const INGR = [
+      { key: "Hyaluronsäure", what: "der Feuchtigkeits-Schwamm", body: "Bindet Wasser in der obersten Hautschicht und lässt sie praller wirken. Verträgt sich mit fast allem.", gut: "trockene und müde Haut" },
+      { key: "Niacinamid", what: "der Ausgleicher", body: "Eine Form von Vitamin B3. Wird gern genutzt, um das Hautbild ebenmäßiger und ruhiger wirken zu lassen.", gut: "Mischhaut und Unreinheiten" },
+      { key: "Vitamin C", what: "der Aufwecker", body: "Ein Antioxidans, das fahler Haut frische Ausstrahlung geben soll. Morgens unter Sonnenschutz am schönsten.", gut: "fahle, müde Haut" },
+      { key: "Squalan", what: "die leichte Pflege", body: "Ein pflanzlicher Feuchtigkeitsspender, der schnell einzieht, ohne zu fetten. Fühlt sich seidig an.", gut: "trockene Haut" },
+      { key: "Aloe", what: "die Beruhigende", body: "Kühlt und spendet Feuchtigkeit. Ein Klassiker für Momente, in denen die Haut etwas Ruhe braucht.", gut: "gereizte, sensible Haut" },
+      { key: "Retinal", what: "die Nachtschicht", body: "Eine Form von Vitamin A. Langsam einschleichen, abends anwenden, tagsüber Sonnenschutz nicht vergessen.", gut: "reife Haut" },
+      { key: "Salicylsäure", what: "die Poren-Klärerin", body: "Eine BHA, die in die Pore hineinwirkt und sie freier wirken lässt. Sanft dosiert statt aggressiv.", gut: "unreine Haut" },
+    ];
+
+    INGR.forEach((ing) => {
+      const prods = PRODUKTE.filter((p) => p.wirkstoff.includes(ing.key));
+      ing.prods = prods.map((p) => p.name);
+    });
+
+    let active = 0;
+    list.innerHTML = INGR.map((ing, i) =>
+      '<li role="presentation"><button class="ingr__item" role="tab" aria-selected="' + (i === 0) + '" data-i="' + i + '">' +
+        '<span class="ingr__item-dot" aria-hidden="true"></span>' +
+        '<span class="ingr__item-label">' + esc(ing.key) + '</span>' +
+        '<span class="ingr__item-use">' + esc(ing.what) + '</span>' +
+      '</button></li>').join("");
+
+    function renderDetail(i) {
+      const ing = INGR[i];
+      detail.classList.add("is-swapping");
+      const paint = () => {
+        detail.innerHTML =
+          '<span class="ingr__detail-tag">Wirkstoff</span>' +
+          '<h3 class="ingr__detail-name">' + esc(ing.key) + '</h3>' +
+          '<p class="ingr__detail-what">' + esc(ing.what) + '</p>' +
+          '<p class="ingr__detail-body">' + esc(ing.body) + '</p>' +
+          '<span class="ingr__detail-tag">Gut bei</span>' +
+          '<p class="ingr__detail-body">' + esc(ing.gut) + '</p>' +
+          (ing.prods.length ? '<span class="ingr__detail-tag">Steckt drin</span><div class="ingr__detail-prods">' +
+            ing.prods.map((n) => '<span class="ingr__detail-prod">' + esc(n) + '</span>').join("") + '</div>' : "");
+        requestAnimationFrame(() => detail.classList.remove("is-swapping"));
+        setTimeout(() => detail.classList.remove("is-swapping"), 60);
+      };
+      setTimeout(paint, ctx.prefersReduced ? 0 : 140);
+    }
+
+    list.querySelectorAll(".ingr__item").forEach((btn) => {
+      const select = () => {
+        const i = +btn.dataset.i;
+        if (i === active) return;
+        active = i;
+        list.querySelectorAll(".ingr__item").forEach((b) => b.setAttribute("aria-selected", b === btn));
+        renderDetail(i);
+      };
+      btn.addEventListener("click", select);
+      btn.addEventListener("mouseenter", () => { if (window.matchMedia("(hover:hover)").matches) select(); });
+    });
+    renderDetail(0);
+  });
+
+  /* ======================================================= MODUL: BAUM-ZÄHLER */
+  window.JUNGLUECK_MODULES.push(function treeCounterModule(ctx) {
+    const { $ } = ctx;
+    const numEl = document.querySelector("[data-count-to]");
+    const mount = $('[data-mount="tree-counter"]');
+    if (!numEl || !mount) return;
+    const target = +numEl.dataset.countTo;
+    const fmt = (n) => Math.round(n).toLocaleString("de-DE");
+
+    function run() {
+      if (ctx.prefersReduced) { numEl.textContent = fmt(target); return; }
+      const dur = 1600, start = performance.now();
+      const ease = (t) => 1 - Math.pow(1 - t, 3);
+      function tick(now) {
+        const t = Math.min(1, (now - start) / dur);
+        numEl.textContent = fmt(target * ease(t));
+        if (t < 1) requestAnimationFrame(tick);
+        else numEl.textContent = fmt(target);
+      }
+      requestAnimationFrame(tick);
+      // Fallback ohne rAF (Hintergrund-Tab): nach Timeout Endwert setzen
+      setTimeout(() => { if (numEl.textContent === "0") numEl.textContent = fmt(target); }, dur + 400);
+    }
+    whenInView(mount, run, 0.35);
+  });
+
+  /* ======================================================= MODUL: STIMMEN */
+  window.JUNGLUECK_MODULES.push(function stimmenModule(ctx) {
+    const { $ } = ctx;
+    const stage = $('[data-mount="stimmen"]');
+    const dotsEl = $('[data-mount="stimmen-dots"]');
+    if (!stage || !dotsEl) return;
+
+    const STIMMEN = [
+      { q: "Endlich verstehe ich, was ich mir ins Gesicht schmiere. Ein Wirkstoff, ein Satz Erklärung, fertig.", name: "Carla Neumann", role: "seit zwei Jahren dabei" },
+      { q: "Das Serum hat mich überzeugt. Dass ich das Glas zurückgeben kann, hält mich hier.", name: "Deniz Yilmaz", role: "aus Hamburg" },
+      { q: "Keine zwölf Fläschchen mehr im Bad. Zwei Produkte, die tun, was sie sollen.", name: "Miriam Fuchs", role: "Mischhaut-Team" },
+      { q: "Mir gefällt, dass sie ehrlich sagen, wenn etwas nicht für mich ist. Das schafft Vertrauen.", name: "Ted Achterberg", role: "empfindliche Haut" },
+    ];
+
+    stage.innerHTML = STIMMEN.map((s, i) =>
+      '<figure class="stimme ' + (i === 0 ? "is-active" : "") + '" data-i="' + i + '">' +
+        '<blockquote class="stimme__quote">' + esc(s.q) + '</blockquote>' +
+        '<figcaption class="stimme__by"><span class="stimme__name">' + esc(s.name) + '</span>' +
+        '<span class="stimme__role">' + esc(s.role) + '</span></figcaption>' +
+      '</figure>').join("");
+    dotsEl.innerHTML = STIMMEN.map((_, i) =>
+      '<button class="stimmen__dot ' + (i === 0 ? "is-active" : "") + '" role="tab" aria-selected="' + (i === 0) + '" aria-label="Stimme ' + (i + 1) + '" data-i="' + i + '"></button>').join("");
+
+    const slides = Array.from(stage.querySelectorAll(".stimme"));
+    const dots = Array.from(dotsEl.querySelectorAll(".stimmen__dot"));
+    let idx = 0, timer = null;
+
+    function go(n) {
+      idx = (n + slides.length) % slides.length;
+      slides.forEach((s, i) => s.classList.toggle("is-active", i === idx));
+      dots.forEach((d, i) => { d.classList.toggle("is-active", i === idx); d.setAttribute("aria-selected", i === idx); });
+    }
+    function next() { go(idx + 1); }
+    function start() { if (ctx.prefersReduced) return; stop(); timer = setInterval(next, 5200); }
+    function stop() { if (timer) clearInterval(timer); timer = null; }
+
+    dots.forEach((d) => d.addEventListener("click", () => { go(+d.dataset.i); start(); }));
+    const sec = document.getElementById("stimmen");
+    sec.addEventListener("mouseenter", stop);
+    sec.addEventListener("mouseleave", start);
+    sec.addEventListener("focusin", stop);
+    // Autoplay erst starten, wenn sichtbar
+    whenInView(stage, start, 0.4);
+  });
+
+  /* ======================================================= MODUL: FAQ */
+  window.JUNGLUECK_MODULES.push(function faqModule(ctx) {
+    const { $ } = ctx;
+    const mount = $('[data-mount="faq"]');
+    if (!mount) return;
+    const FAQ = [
+      { q: "Ist das der echte JUNGLÜCK-Shop?", a: "Nein. Das hier ist ein inoffizielles Konzept-Redesign fürs Portfolio von Oddomode. Zur echten Marke geht es über den Link im Footer." },
+      { q: "Warum nur ein Wirkstoff pro Produkt?", a: "Weil du dann weißt, was du benutzt und warum. Ein Wirkstoff, richtig dosiert, kann mehr als eine lange Liste, die sich gegenseitig ausbremst." },
+      { q: "Wie funktioniert das mit dem Glas?", a: "Braunglas kommt zurück, wird gereinigt und neu befüllt. In diesem Konzept ist der Kreislauf als Idee dargestellt." },
+      { q: "Sind die Produkte vegan?", a: "In diesem Konzept: ja, durchgehend vegan und ohne Mikroplastik. Reale Angaben findest du bei der echten Marke." },
+      { q: "Stimmen die Preise?", a: "Die Preise hier sind illustrative Konzeptwerte, damit der Shop realistisch wirkt. Keine echten Verkaufspreise." },
+      { q: "Kann ich wirklich bestellen?", a: "Nein, es gibt keinen echten Checkout. Warenkorb und Wunschliste zeigen nur, wie sich das Einkaufen anfühlen würde." },
+    ];
+    mount.innerHTML = FAQ.map((f, i) =>
+      '<div class="faq__item">' +
+        '<button class="faq__q" aria-expanded="false" aria-controls="faq-a-' + i + '">' +
+          '<span>' + esc(f.q) + '</span><span class="faq__icon" aria-hidden="true"></span>' +
+        '</button>' +
+        '<div class="faq__a" id="faq-a-' + i + '"><div><p>' + esc(f.a) + '</p></div></div>' +
+      '</div>').join("");
+    mount.querySelectorAll(".faq__q").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const open = btn.getAttribute("aria-expanded") === "true";
+        mount.querySelectorAll(".faq__q").forEach((b) => b.setAttribute("aria-expanded", "false"));
+        btn.setAttribute("aria-expanded", open ? "false" : "true");
+      });
+    });
+  });
+
+  /* ======================================================= MODUL: NEWSLETTER */
+  window.JUNGLUECK_MODULES.push(function newsletterModule(ctx) {
+    const { $ } = ctx;
+    const form = $('[data-mount="newsletter"]');
+    if (!form) return;
+    const input = form.querySelector(".field__input");
+    const msg = form.querySelector(".field__msg");
+    const submit = form.querySelector(".newsletter__submit");
+    const label = form.querySelector(".newsletter__submit-label");
+    const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+
+    function setMsg(text, kind) {
+      msg.textContent = text;
+      msg.classList.toggle("is-error", kind === "error");
+      msg.classList.toggle("is-ok", kind === "ok");
+      input.setAttribute("aria-invalid", kind === "error" ? "true" : "false");
+    }
+
+    input.addEventListener("input", () => { if (input.getAttribute("aria-invalid") === "true" && emailOk(input.value)) setMsg("", null); });
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const v = input.value.trim();
+      if (!v) { setMsg("Bitte gib deine E-Mail ein.", "error"); input.focus(); return; }
+      if (!emailOk(v)) { setMsg("Diese E-Mail sieht noch nicht ganz richtig aus.", "error"); input.focus(); return; }
+      // loading
+      submit.dataset.state = "loading";
+      label.textContent = "Moment ...";
+      setMsg("", null);
+      setTimeout(() => {
+        submit.dataset.state = "";
+        label.textContent = "Abonniert";
+        setMsg("Danke. In diesem Konzept schicken wir natürlich keine echten Mails.", "ok");
+        input.value = "";
+        setTimeout(() => { label.textContent = "Abonnieren"; }, 2600);
+      }, 900);
+    });
+  });
+
   /* ======================================================= MODUL: SIGNATURE-DRAW */
   window.JUNGLUECK_MODULES.push(function signatureModule(ctx) {
     const strokes = document.querySelectorAll(".sig__stroke");

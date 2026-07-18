@@ -190,25 +190,148 @@
       </div>
     </section>
 
-    <!-- Sektionen 7–11 (Aufgabe 3) -->
-    <section class="section section--tint" id="inhaltsstoffe" aria-label="Inhaltsstoffe"><!-- A3 --></section>
-    <section class="section" id="nachhaltigkeit" aria-label="Nachhaltigkeit"><!-- A3 --></section>
-    <section class="section section--tint" id="stimmen" aria-label="Stimmen"><!-- A3 --></section>
-    <section class="section" id="faq" aria-label="Häufige Fragen"><!-- A3 --></section>
-    <section class="section section--deep" id="newsletter" aria-label="Newsletter"><!-- A3 --></section>
+    <!-- ======================= 7 · INHALTSSTOFFE ======================= -->
+    <section class="section section--tint" id="inhaltsstoffe" aria-label="Inhaltsstoffe">
+      <div class="wrap ingr">
+        <div class="ingr__intro" data-reveal>
+          <p class="eyebrow">Inhaltsstoffe</p>
+          <h2>Was wirklich drin ist.</h2>
+          <p class="muted">Tipp einen Wirkstoff an, dann erklären wir ihn dir ohne Fachchinesisch.</p>
+        </div>
+        <div class="ingr__grid">
+          <ul class="ingr__list" data-mount="ingr-list" role="tablist" aria-label="Wirkstoffe" data-reveal></ul>
+          <div class="ingr__detail" data-mount="ingr-detail" data-reveal aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= 8 · NACHHALTIGKEIT ======================= -->
+    <section class="section" id="nachhaltigkeit" aria-label="Nachhaltigkeit">
+      <div class="wrap nachhaltig">
+        <div class="nachhaltig__lead" data-reveal>
+          <h2>Weniger Müll, mehr Wald.</h2>
+          <p>Braunglas kommt zurück und wird neu befüllt. Und für jede Konzept-Bestellung wächst rechnerisch ein Baum mit. So könnte Verantwortung aussehen, wenn man sie ernst nimmt.</p>
+        </div>
+        <div class="nachhaltig__counter" data-mount="tree-counter" data-reveal>
+          <div class="counter">
+            <span class="counter__num" data-count-to="12480" aria-hidden="true">0</span>
+            <span class="counter__label">Bäume mitgepflanzt<small>illustrative Konzept-Zahl</small></span>
+          </div>
+          <div class="counter__cycle">
+            <span class="cycle__step">Zurückgeben</span>
+            <span class="cycle__arrow" aria-hidden="true">→</span>
+            <span class="cycle__step">Reinigen</span>
+            <span class="cycle__arrow" aria-hidden="true">→</span>
+            <span class="cycle__step">Neu befüllen</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= 9 · STIMMEN ======================= -->
+    <section class="section section--tint" id="stimmen" aria-label="Stimmen">
+      <div class="wrap stimmen">
+        <h2 data-reveal>Was Menschen sagen.</h2>
+        <div class="stimmen__stage" data-mount="stimmen" data-reveal aria-live="polite"></div>
+        <div class="stimmen__dots" data-mount="stimmen-dots" role="tablist" aria-label="Stimmen wechseln"></div>
+      </div>
+    </section>
+
+    <!-- ======================= 10 · FAQ ======================= -->
+    <section class="section" id="faq" aria-label="Häufige Fragen">
+      <div class="wrap faq">
+        <h2 data-reveal>Häufige Fragen.</h2>
+        <div class="faq__list" data-mount="faq" data-reveal></div>
+      </div>
+    </section>
+
+    <!-- ======================= 11 · NEWSLETTER ======================= -->
+    <section class="section section--deep" id="newsletter" aria-label="Newsletter">
+      <div class="wrap newsletter">
+        <div class="newsletter__copy" data-reveal>
+          <p class="newsletter__sig">
+            <span class="sig">
+              <span class="em">Weil du schön bist.</span>
+              <svg class="sig__stroke" viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M4 13 C 45 4, 90 4, 130 10 S 185 15, 196 7"/></svg>
+            </span>
+          </p>
+          <h2>Ein Brief, wenn es etwas zu sagen gibt.</h2>
+          <p class="muted">Kein Dauerfeuer, keine Rabatt-Panik. Nur wenn wirklich etwas Neues da ist.</p>
+        </div>
+        <form class="newsletter__form" data-mount="newsletter" novalidate>
+          <label class="field">
+            <span class="field__label">Deine E-Mail</span>
+            <input type="email" name="email" class="field__input" placeholder="du@beispiel.de" autocomplete="email" required aria-describedby="nl-hint" />
+            <span class="field__msg" id="nl-hint" role="status"></span>
+          </label>
+          <button type="submit" class="btn btn--primary newsletter__submit">
+            <span class="newsletter__submit-label">Abonnieren</span>
+          </button>
+        </form>
+      </div>
+    </section>
   </main>
 
   <!-- ============================ FOOTER ============================ -->
   <footer class="footer" id="footer" aria-label="Fußzeile"><!-- A5: DSGVO-Links --></footer>
 
-  <!-- ===================== SHOP-OVERLAY (Aufgabe 3) ===================== -->
-  <div class="shop" id="shop" data-open="false" aria-hidden="true"><!-- A3 --></div>
+  <!-- ===================== SHOP-OVERLAY ===================== -->
+  <div class="shop" id="shop" data-open="false" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Shop">
+    <div class="shop__topbar">
+      <div class="shop__search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" id="shop-search" class="shop__search-input" placeholder="Wonach suchst du?" aria-label="Produkte suchen" />
+      </div>
+      <button class="icon-btn" id="close-shop" aria-label="Shop schließen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
 
-  <!-- ===================== WARENKORB-OVERLAY (Aufgabe 3) ===================== -->
-  <aside class="cart" id="cart" data-open="false" aria-hidden="true"><!-- A3 --></aside>
+    <div class="shop__body">
+      <aside class="shop__filters" aria-label="Filter">
+        <div class="filter-group">
+          <h3 class="filter-group__title">Kategorie</h3>
+          <div class="filter-chips" data-mount="filter-kategorie" role="group" aria-label="Kategorie"></div>
+        </div>
+        <div class="filter-group">
+          <h3 class="filter-group__title">Hauttyp</h3>
+          <div class="filter-chips" data-mount="filter-hauttyp" role="group" aria-label="Hauttyp"></div>
+        </div>
+        <div class="filter-group">
+          <h3 class="filter-group__title">Preis bis <span id="price-out">40 €</span></h3>
+          <input type="range" id="price-range" class="filter-range" min="8" max="40" step="1" value="40" aria-label="Höchstpreis" />
+        </div>
+        <button class="filter-reset" id="filter-reset">Filter zurücksetzen</button>
+      </aside>
 
-  <!-- ===================== SCHNELLANSICHT-MODAL (Aufgabe 3) ===================== -->
-  <div class="quickview" id="quickview" data-open="false" aria-hidden="true"><!-- A3 --></div>
+      <div class="shop__main">
+        <div class="shop__result-bar">
+          <span id="shop-count" aria-live="polite">25 Produkte</span>
+        </div>
+        <div class="shop__grid" data-mount="shop-grid" role="list" aria-label="Produkte"></div>
+        <p class="shop__empty" id="shop-empty" hidden>Nichts gefunden. Setz die Filter zurück oder such anders.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== WARENKORB-OVERLAY ===================== -->
+  <div class="cart-scrim" id="cart-scrim" data-open="false" aria-hidden="true"></div>
+  <aside class="cart" id="cart" data-open="false" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Warenkorb">
+    <div class="cart__head">
+      <h3>Dein Korb</h3>
+      <button class="icon-btn" id="close-cart" aria-label="Warenkorb schließen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div class="cart__body" data-mount="cart-body"></div>
+    <div class="cart__foot" data-mount="cart-foot"></div>
+  </aside>
+
+  <!-- ===================== SCHNELLANSICHT-MODAL ===================== -->
+  <div class="quickview" id="quickview" data-open="false" aria-hidden="true">
+    <div class="quickview__scrim" id="qv-scrim"></div>
+    <div class="quickview__panel" role="dialog" aria-modal="true" aria-label="Schnellansicht" data-mount="quickview-panel"></div>
+  </div>
 
   <!-- ===================== TOASTS ===================== -->
   <div class="toast-wrap" id="toast-wrap" aria-live="polite"></div>
@@ -216,5 +339,6 @@
   <script src="data.js"></script>
   <script src="app.js"></script>
   <script src="sections.js"></script>
+  <script src="shop.js"></script>
 </body>
 </html>
